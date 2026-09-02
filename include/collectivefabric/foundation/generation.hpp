@@ -62,12 +62,14 @@ constexpr Generation<Tag> make_generation(std::uint64_t v) noexcept {
   return Generation<Tag>(v);
 }
 
+#ifndef __CUDACC__
 template <typename Tag>
 struct std::hash<collectivefabric::Generation<Tag>> {
   std::size_t operator()(const collectivefabric::Generation<Tag>& g) const noexcept {
     return std::hash<std::uint64_t>{}(g.value());
   }
 };
+#endif
 
 #define COLLECTIVEFABRIC_GEN(TAG) \
   struct TAG##Tag {}; \

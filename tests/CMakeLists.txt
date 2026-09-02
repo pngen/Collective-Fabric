@@ -69,3 +69,15 @@ add_executable(test_protocol test_protocol.cpp)
 target_link_libraries(test_protocol PRIVATE collectivefabric)
 collectivefabric_enable_warnings(test_protocol)
 add_test(NAME test_protocol COMMAND test_protocol)
+if(COLLECTIVEFABRIC_ENABLE_CUDA)
+  add_executable(test_cuda test_cuda.cu)
+  set_target_properties(test_cuda PROPERTIES CUDA_ARCHITECTURES 120 CUDA_STANDARD 20)
+  # Project CUDA code is warning-clean under /W4; suppress unavoidable vendor
+  # host-stub warnings (project-controlled CUDA code remains clean).
+  if(MSVC)
+    set_target_properties(test_cuda PROPERTIES
+        CUDA_FLAGS "-Xcompiler=/W4,/wd4204,/wd4100,/wd4324,/wd5033")
+  endif()
+  target_link_libraries(test_cuda PRIVATE collectivefabric cudart)
+  add_test(NAME cuda COMMAND test_cuda)
+endif()

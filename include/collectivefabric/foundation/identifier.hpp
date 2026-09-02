@@ -29,12 +29,14 @@ private:
   UInt value_{0};
 };
 
+#ifndef __CUDACC__
 template <typename Tag, typename UInt>
 struct std::hash<collectivefabric::StrongId<Tag, UInt>> {
   std::size_t operator()(const collectivefabric::StrongId<Tag, UInt>& v) const noexcept {
     return std::hash<UInt>{}(v.raw());
   }
 };
+#endif
 
 template <typename Tag, typename UInt>
 std::ostream& operator<<(std::ostream& os, const ::collectivefabric::StrongId<Tag, UInt>& v);

@@ -197,8 +197,10 @@ CollectivePlan Planner::plan(const PlannerInput& in) const {
   };
 
   const Candidate* best = nullptr;
+  // BACKEND_DEFAULT is a delegation fallback, never preferred over a real
+  // algorithm when one is feasible. Two passes: prefer real algorithms.
   for (const auto& c : cands) {
-    if (!c.feasible) continue;
+    if (!c.feasible || c.algorithm == Algorithm::BACKEND_DEFAULT) continue;
     if (!best) { best = &c; continue; }
     bool better = false;
     auto ta = est_time(c);
@@ -217,6 +219,14 @@ CollectivePlan Planner::plan(const PlannerInput& in) const {
       else better = static_cast<int>(c.algorithm) < static_cast<int>(best->algorithm);
     }
     if (better) best = &c;
+  }
+  if (!best) {
+    // no real algorithm feasible; fall back to BACKEND_DEFAULT if present
+    for (const auto& c : cands) {
+      if (!c.feasible) continue;
+      if (!best) { best = &c; continue; }
+      if (c.steps < best->steps || (c.steps == best->steps && c.byte_movement < best->byte_movement)) best = &c;
+    }
   }
 
   if (!best) throw Error(ErrorCode::UNSUPPORTED, "no feasible algorithm for the requested collective");

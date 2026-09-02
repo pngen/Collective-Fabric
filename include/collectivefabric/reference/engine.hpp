@@ -64,8 +64,8 @@ private:
                         std::size_t per_bytes, std::uint64_t root_index,
                         std::uint64_t rank_count,
                         std::vector<std::vector<std::uint8_t>>& outputs) {
-    if (root_index >= inputs.size() || inputs[root_index].bytes < per_bytes) {
-      throw Error(ErrorCode::VALIDATION, "broadcast: root input too small");
+    if (root_index >= inputs.size() || inputs[root_index].bytes != per_bytes) {
+      throw Error(ErrorCode::VALIDATION, "broadcast: root input size mismatch");
     }
     for (std::uint64_t r = 0; r < rank_count; ++r) {
       outputs[r].assign(per_bytes, 0);
@@ -95,7 +95,7 @@ private:
                          std::uint64_t rank_count, std::size_t total_bytes,
                          std::vector<std::vector<std::uint8_t>>& outputs) {
     for (std::uint64_t r = 0; r < rank_count; ++r) {
-      if (inputs[r].bytes < per_bytes) throw Error(ErrorCode::VALIDATION, "all_gather: rank input too small");
+      if (inputs[r].bytes != per_bytes) throw Error(ErrorCode::VALIDATION, "all_gather: rank input size mismatch");
       outputs[r].assign(total_bytes, 0);
       for (std::uint64_t i = 0; i < rank_count; ++i)
         std::memcpy(outputs[r].data() + i * per_bytes, inputs[i].data, per_bytes);
@@ -110,7 +110,7 @@ private:
     if (!total) throw Error(ErrorCode::ARITHMETIC_OVERFLOW, "reduce_scatter: overflow");
     const std::size_t total_bytes = static_cast<std::size_t>(*total);
     for (std::uint64_t r = 0; r < rank_count; ++r)
-      if (inputs[r].bytes < total_bytes) throw Error(ErrorCode::VALIDATION, "reduce_scatter: rank input too small");
+      if (inputs[r].bytes != total_bytes) throw Error(ErrorCode::VALIDATION, "reduce_scatter: rank input size mismatch");
     for (std::uint64_t r = 0; r < rank_count; ++r) outputs[r].assign(per_bytes, 0);
     // For each block b, reduce across all ranks' block b; block b belongs to rank b.
     for (std::uint64_t b = 0; b < rank_count; ++b) {
@@ -126,7 +126,7 @@ private:
   static void checksize(const std::vector<Span>& inputs, std::size_t per_bytes, std::uint64_t rank_count) {
     if (inputs.size() < rank_count) throw Error(ErrorCode::VALIDATION, "reference engine: missing rank contribution");
     for (std::uint64_t r = 0; r < rank_count; ++r)
-      if (inputs[r].bytes < per_bytes) throw Error(ErrorCode::VALIDATION, "reference engine: rank contribution too small");
+      if (inputs[r].bytes != per_bytes) throw Error(ErrorCode::VALIDATION, "reference engine: rank contribution size mismatch");
   }
 
   // Reduction left fold in rank order. Result written to out (per_bytes).

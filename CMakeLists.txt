@@ -11,6 +11,12 @@ option(COLLECTIVEFABRIC_BUILD_EXAMPLES "Build runnable examples" ON)
 option(COLLECTIVEFABRIC_BUILD_BENCHMARKS "Build benchmarks" ON)
 option(COLLECTIVEFABRIC_BUILD_TOOLS "Build CLI and coordinator/worker tools" ON)
 
+if(COLLECTIVEFABRIC_ENABLE_CUDA)
+  set(CMAKE_CUDA_ARCHITECTURES 120)
+  enable_language(CUDA)
+  set(CMAKE_CUDA_STANDARD 20)
+endif()
+
 include(GNUInstallDirs)
 
 set(COLLECTIVEFABRIC_SOURCES
