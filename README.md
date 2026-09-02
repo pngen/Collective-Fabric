@@ -87,7 +87,7 @@ CUDA proof (optional):
     cmake -S . -B build-cuda -G Ninja -DCMAKE_BUILD_TYPE=Release \
       -DCOLLECTIVEFABRIC_ENABLE_CUDA=ON \
       -DCMAKE_CUDA_COMPILER=<path-to-nvcc> \
-      -DCOLLECTIVEFABRIC_CUDA_ARCHITECTURES=120
+      -DCOLLECTIVEFABRIC_CUDA_ARCHITECTURES=120   # sm_120 on the validation host
     cmake --build build-cuda
     ctest --test-dir build-cuda -R cuda --output-on-failure
 
