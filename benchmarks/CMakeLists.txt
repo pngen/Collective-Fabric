@@ -1,0 +1,3 @@
+add_executable(collective-fabric-benchmark benchmark.cpp)
+target_link_libraries(collective-fabric-benchmark PRIVATE collectivefabric)
+collectivefabric_enable_warnings(collective-fabric-benchmark)
