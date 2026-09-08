@@ -146,4 +146,5 @@ Completed-work benchmarks under `benchmarks/` report explicit units (ops/s, µs/
 Collective Fabric transmits no telemetry. All observations, logs, benchmarks, and persistence artifacts are stored locally on the host that produced them.
 
 ## License
+
 Apache License 2.0. Copyright 2026 Summon Software Labs. No telemetry transmission.
