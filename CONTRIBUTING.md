@@ -48,8 +48,6 @@ deterministic reference backend to prove the runtime independently.
 - Validate in both Release and Debug configurations.
 - New code should add focused tests. Prefer many focused test executables over
   a single opaque monolithic test.
-- Do not add test timeouts, watchdogs, or process-execution limits as a
-  substitute for correctness.
 
 ## License
 
