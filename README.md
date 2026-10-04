@@ -46,7 +46,7 @@ Measurements distinguish `THEORETICAL`, `BACKEND_REPORTED`, `MEASURED`, `SYNTHET
 
 ## Overlap semantics
 
-Collective Fabric models whether an individual plan can overlap safely and describes the evidence for actual overlap. It does not perform global arbitration among multiple competing collectives (that belongs to a future Collective Scheduler). Overlap reasoning is deterministic and exposed in the plan explanation.
+Collective Fabric models whether an individual plan can overlap safely and describes the evidence for actual overlap. It does not perform global arbitration among multiple competing collectives (that belongs to a future [Collective Scheduler](https://github.com/pngen/Collective-Scheduler)). Overlap reasoning is deterministic and exposed in the plan explanation.
 
 ## Health semantics
 
